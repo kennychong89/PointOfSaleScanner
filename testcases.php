@@ -10,7 +10,7 @@ class ListingClassTest extends PHPUnit_Framework_TestCase {
 		$inventory = new Inventory();
 		$productListing = new Listing($inventory);
 		
-		$inventory->add('Kappa Shave', 3.75, ['3'=>4.50,'5'=>5.50]);
+		$inventory->add('Kappa Shave', 3.75, ['3'=>'4.50','5'=>5.50]);
 		$this->assertEquals($productListing->getUnitPrice('Kappa Shave'), 3.75);
 		$this->assertEquals($productListing->getUnitPrice('Keepo Shave'), null);
 		
