@@ -58,7 +58,7 @@ Scan these items in this order: ABCD; Verify the total price is $15.40.
 		$product_inventory = new Inventory();
 
 		// add products and prices here. 
-		$product_inventory->add("A", 2.00, [4=>7.00]);
+		$product_inventory->add("A", 2.00, [4=>'7.00']);
 		$product_inventory->add("B", 12.00);
 		$product_inventory->add("C", 1.25, [6=>6.00]);
 		$product_inventory->add("D", 0.15);
@@ -66,8 +66,8 @@ Scan these items in this order: ABCD; Verify the total price is $15.40.
 		$product_listing = new Listing($product_inventory);
 		$terminal = new Terminal($product_listing);
 
-		$terminal->setUnitPricing("A", 3.50);
-		$terminal->setVolumePricing("A", [2=>2.40, 7=>10.00]);
+		//$terminal->setUnitPricing("A", 3.50);
+		//$terminal->setVolumePricing("A", [2=>2.40, 7=>10.00]);
 
 		// process form data
 		if (isset($_POST["submit"])) {

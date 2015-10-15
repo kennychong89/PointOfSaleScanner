@@ -29,3 +29,5 @@ use the Invoice class to calculate total cost of scanned products.
  
 The Invoice class will also use the Listing class given by Terminal to perform calculations.
 
+NOTE:
+I did not handle all possibie exceptions if someone tries inputting non-numeric or negative unit and volume prices, except for the add() method in Inventory class.  

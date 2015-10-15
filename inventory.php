@@ -15,12 +15,34 @@ class Inventory {
 	* @param string $product_name
 	* @param float $unit_price     the unit price of the product 
 	* @param array $vol_prices     the volume prices of the product
+	*
+	* @throws Exception if either $unit_price or $vol_prices's values are not numbers.
 	*/
 	public function add($product_name, $unit_price=0.00, $vol_prices=array()) {
-		if (!$this->isInInventory($product_name))
-			$this->inventory[$product_name] = new Product($product_name, $unit_price, $vol_prices);
+		try {
+			$this->checkVolumePricesAreValid($vol_prices);
+			$this->checkUnitPriceIsValid($unit_price);
+
+			if (!$this->isInInventory($product_name))
+				$this->inventory[$product_name] = new Product($product_name, $unit_price, $vol_prices);
+		} catch (Exception $e) {
+			echo nl2br($e->getMessage() . " for Product <b>" . $product_name. "</b>\n");
+			echo nl2br("Product <b>" . $product_name . "</b> has not been added to the system\n");
+		}
 	}
 
+	private function checkVolumePricesAreValid($vol_prices) {
+		foreach($vol_prices as $key=>$value) {
+			if (!is_numeric($value) || !is_numeric($key))
+				throw new Exception("Cannot process volume: <b>" . $key . "," .$value . "</b>");
+		}
+	}
+
+	private function checkUnitPriceIsValid($unit_price) {
+		if (!is_numeric($unit_price)) {
+			throw new Exception("Cannot process unit price: <b>" . $unit_price . "</b>");
+		}
+	}
 	/**
 	* Retrieves product from the inventory.
 	* @param string $product_name
