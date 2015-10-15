@@ -1,7 +1,3 @@
-<?php 
-	include 'terminal.php'; 
-	include 'inventory.php';
- ?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,75 +44,48 @@ Scan these items in this order: ABCD; Verify the total price is $15.40.
 </pre>
 
 <h1>Your answer can use the form below</h1>
-<form method="post" action="" id="target">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="target">
   <input type="text" name="product_txt" />
   <button type="submit" name="submit" id="process">Submit</button>
 </form>
 
 <div class="result">
+	<?php 
+		include 'terminal.php';
+		include 'inventory.php';
 
+		// Initialize inventory, listings, and terminal objects.
+		$product_inventory = new Inventory();
+
+		// add products and prices here. 
+		$product_inventory->add("A", 2.00, [4=>7.00]);
+		$product_inventory->add("B", 12.00);
+		$product_inventory->add("C", 1.25, [6=>6.00]);
+		$product_inventory->add("D", 0.15);
+
+		$product_listing = new Listing($product_inventory);
+		$terminal = new Terminal($product_listing);
+
+		$terminal->setUnitPricing("A", 3.50);
+		$terminal->setVolumePricing("A", [2=>2.40, 7=>10.00]);
+
+		// process form data
+		if (isset($_POST["submit"])) {
+			$products = $_POST["product_txt"];
+
+			for ($i = 0; $i < strlen($products); $i++) {
+
+				if ($products[$i] != " ")
+					$scannable = $terminal->scan($products[$i]);
+
+				// did the product go into the system?
+				if (!$scannable)
+					echo "Unable to get price for: " . $products[$i] . "<br>";
+			}
+
+			echo "<b>The total cost of: " . $products . " is: $" . number_format($terminal->getTotalCost(), 2, '.', ',') . "</b>";
+		}
+	?>
 </div>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$("#target").submit(function(event) {
-			$.ajax({
-				type: "POST",
-				url: "test.php",
-				data : ({data:"test"}),
-				success: function(data) {
-					alert(data);
-				}
-			});
-
-			event.preventDefault();
-		});
-	});
-	
-		/*var button = document.getElementById("process");
-
-		button.addEventListener("click", function(event) {
-			event.preventDefault();
-			var input = document.getElementsByName("product_txt")[0];
-			processInput(input.value);
-		});
-
-		function processInput(input) {
-			for (var i = 0; i < input.length; i++) {
-				var item = input.charAt(i);
-
-				// no spaces
-				if (item != ' ') {		
-					sendInput(item);
-				}	
-			}
-		}
-
-		function sendInput(item) {
-			var hp = new XMLHttpRequest();
-			var url = "index.php";
-			var params = "data=" + item;
-
-			hp.open("POST", url, true);
-			hp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			hp.onreadystatechange = function() {
-				if (hp.readyState == 4 && hp.status == 200) {
-					alert(hp.responseText);
-				}
-			}
-			hp.send(params);
-
-			return false;
-		}
-
-		function createParagraphNode(text) {
-			var node = document.createElement("p");
-			var textNode = document.createTextNode(text);
-			node.appendChild(textNode);
-
-			return node;
-		}
-		*/
-</script>
-
 </body>
 </html>

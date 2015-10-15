@@ -3,7 +3,7 @@
 * An invoice system that tracks products and calculates the total
 * cost of all them based on a product listing. 	
 */
-class ProductInvoice {
+class Invoice {
 	private $invoice;
 	private $product_listing;
 

@@ -14,7 +14,7 @@ class Terminal {
 	*/
 	public function __construct($product_listing) {
 		$this->product_listing = $product_listing;
-		$this->product_invoice = new ProductInvoice($this->product_listing);
+		$this->product_invoice = new Invoice($this->product_listing);
 	}
 
 	/**
@@ -50,7 +50,7 @@ class Terminal {
 	* after this method is called. To clear the terminal, call 
 	* the reset() method.
 	*/
-	public function getTotalPrice() {
+	public function getTotalCost() {
 		return $this->product_invoice->getTotal();
 	}
 
